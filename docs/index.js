@@ -1,4 +1,8 @@
-const answerOptions = ['Yes', 'Somewhat', 'No'];
+const answerOptions = [
+  { text: 'Yes', score: 1.0 },
+  { text: 'Somewhat', score: 0.5 },
+  { text: 'No', score: 0.0 }
+];
 const questions = [
   { question: 'Do you have a Career Management Plan?', answers: answerOptions },
   { question: 'Do you have an updated resume?', answers: answerOptions },
@@ -33,7 +37,7 @@ function renderQuestion() {
   answersEl.innerHTML = '';
   q.answers.forEach((ans, idx) => {
     const btn = document.createElement('button');
-    btn.textContent = ans;
+    btn.textContent = ans.text;
     btn.className = userAnswers[currentQuestion] === idx ? 'selected' : '';
     btn.onclick = () => {
       userAnswers[currentQuestion] = idx;
@@ -59,9 +63,16 @@ nextBtn.onclick = () => {
     currentQuestion++;
     renderQuestion();
   } else {
-    // Optionally show results or a completion message
+    // Calculate and show score
+    let total = 0;
+    for (let i = 0; i < questions.length; i++) {
+      const ansIdx = userAnswers[i];
+      if (ansIdx !== null) {
+        total += questions[i].answers[ansIdx].score;
+      }
+    }
     questionNumberEl.textContent = '';
-    questionTextEl.textContent = 'Quiz complete!';
+    questionTextEl.textContent = `Quiz complete! Your score: ${total} / ${questions.length}`;
     answersEl.innerHTML = '';
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'none';

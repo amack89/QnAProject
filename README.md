@@ -1,14 +1,23 @@
 # QnAProject
 
-This is a simple JavaScript project that prints "Hello, World!" to the console.
+This is a multiple-choice quiz web app. It asks 15 career-related questions, each with three answer options:
 
-## How to Run
+1. Yes (score: 1.0)
+2. Somewhat (score: 0.5)
+3. No (score: 0.0)
 
-1. Make sure you have [Node.js](https://nodejs.org/) installed.
-2. Open a terminal in the project directory.
-3. Run:
-   ```sh
-   npm start
-   ```
+At the end, your total score is displayed.
 
-You should see `Hello, World!` printed in the terminal.
+## How to Use
+
+- Open `docs/index.html` in your browser to take the quiz.
+- All app files are in the `docs` folder for easy deployment (e.g., GitHub Pages or Cordova/Capacitor for Android).
+
+
+## For Development
+
+- To run with Node.js (for development), use:
+  ```sh
+  npm start
+  ```
+  (This runs the JavaScript file, but the quiz is designed for the browser.)
