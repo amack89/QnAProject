@@ -14,7 +14,8 @@ body {
   padding: 2rem 2.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  min-width: 320px;
+  width: 400px;
+  min-height: 420px;
   max-width: 90vw;
   display: flex;
   flex-direction: column;
