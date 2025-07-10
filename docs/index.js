@@ -79,5 +79,58 @@ nextBtn.onclick = () => {
   }
 };
 
-// Initialize
-renderQuestion();
+// Set background image for each question
+function setQuizBgImage() {
+  let bg = document.getElementById('quiz-bg');
+  if (!bg) return;
+  let img = bg.querySelector('.quiz-bg-image');
+  if (!img) {
+    img = document.createElement('img');
+    img.className = 'quiz-bg-image';
+    bg.insertBefore(img, bg.firstChild);
+  }
+  // Use question number (1-based) for image name
+  const imgNum = currentQuestion + 1;
+  img.src = `img/${imgNum}.png`;
+  img.alt = `Background for question ${imgNum}`;
+}
+
+// Update renderQuestion to also update background
+function renderQuestionWithBg() {
+  renderQuestion();
+  setQuizBgImage();
+}
+
+// Override navigation to use new render
+prevBtn.onclick = () => {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestionWithBg();
+  }
+};
+
+nextBtn.onclick = () => {
+  if (userAnswers[currentQuestion] === null) return;
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    renderQuestionWithBg();
+  } else {
+    // Calculate and show score
+    let total = 0;
+    for (let i = 0; i < questions.length; i++) {
+      const ansIdx = userAnswers[i];
+      if (ansIdx !== null) {
+        total += questions[i].answers[ansIdx].score;
+      }
+    }
+    questionNumberEl.textContent = '';
+    questionTextEl.textContent = `Quiz complete! Your score: ${total} / ${questions.length}`;
+    answersEl.innerHTML = '';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    setQuizBgImage();
+  }
+};
+
+// Initial render
+renderQuestionWithBg();
