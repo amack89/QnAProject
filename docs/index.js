@@ -21,7 +21,8 @@ const questions = [
   { question: 'Have you identified your core strengths and know how to articulate them clearly in interviews or networking settings?', answers: answerOptions }
 ];
 
-let currentQuestion = 0;
+
+let currentQuestion = -1; // -1 means start page
 const userAnswers = Array(questions.length).fill(null);
 
 const questionNumberEl = document.getElementById('question-number');
@@ -30,7 +31,22 @@ const answersEl = document.getElementById('answers');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
+function renderStartPage() {
+  questionNumberEl.textContent = '';
+  questionTextEl.innerHTML = '<strong>Welcome to the Career Quiz!</strong><br><br>This quiz will ask you 15 questions about your career management. Click Start to begin.';
+  answersEl.innerHTML = '';
+  prevBtn.style.display = 'none';
+  nextBtn.textContent = 'Start';
+  nextBtn.disabled = false;
+  nextBtn.style.display = '';
+  setQuizBgImage();
+}
+
 function renderQuestion() {
+  if (currentQuestion === -1) {
+    renderStartPage();
+    return;
+  }
   const q = questions[currentQuestion];
   questionNumberEl.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
   questionTextEl.textContent = q.question;
@@ -45,6 +61,7 @@ function renderQuestion() {
     };
     answersEl.appendChild(btn);
   });
+  prevBtn.style.display = '';
   prevBtn.disabled = currentQuestion === 0;
   nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
   nextBtn.disabled = userAnswers[currentQuestion] === null;
@@ -101,8 +118,13 @@ function renderQuestionWithBg() {
   setQuizBgImage();
 }
 
-// Override navigation to use new render
+// Navigation
 prevBtn.onclick = () => {
+  if (currentQuestion === 0) {
+    currentQuestion = -1;
+    renderQuestionWithBg();
+    return;
+  }
   if (currentQuestion > 0) {
     currentQuestion--;
     renderQuestionWithBg();
@@ -110,6 +132,11 @@ prevBtn.onclick = () => {
 };
 
 nextBtn.onclick = () => {
+  if (currentQuestion === -1) {
+    currentQuestion = 0;
+    renderQuestionWithBg();
+    return;
+  }
   if (userAnswers[currentQuestion] === null) return;
   if (currentQuestion < questions.length - 1) {
     currentQuestion++;
