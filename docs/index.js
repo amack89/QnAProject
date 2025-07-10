@@ -106,10 +106,15 @@ function setQuizBgImage() {
     img.className = 'quiz-bg-image';
     bg.insertBefore(img, bg.firstChild);
   }
-  // Use question number (1-based) for image name
-  const imgNum = currentQuestion + 1;
-  img.src = `img/${imgNum}.png`;
-  img.alt = `Background for question ${imgNum}`;
+  if (currentQuestion === -1) {
+    img.src = 'img/Cover.png';
+    img.alt = 'Quiz cover background';
+  } else {
+    // Use question number (1-based) for image name
+    const imgNum = currentQuestion + 1;
+    img.src = `img/${imgNum}.png`;
+    img.alt = `Background for question ${imgNum}`;
+  }
 }
 
 // Update renderQuestion to also update background
@@ -150,12 +155,23 @@ nextBtn.onclick = () => {
         total += questions[i].answers[ansIdx].score;
       }
     }
+    // Show end background
+    let bg = document.getElementById('quiz-bg');
+    if (bg) {
+      let img = bg.querySelector('.quiz-bg-image');
+      if (!img) {
+        img = document.createElement('img');
+        img.className = 'quiz-bg-image';
+        bg.insertBefore(img, bg.firstChild);
+      }
+      img.src = 'img/end.png';
+      img.alt = 'Quiz end background';
+    }
     questionNumberEl.textContent = '';
     questionTextEl.textContent = `Quiz complete! Your score: ${total} / ${questions.length}`;
     answersEl.innerHTML = '';
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'none';
-    setQuizBgImage();
   }
 };
 
