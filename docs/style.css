@@ -68,6 +68,7 @@ body {
   bottom: auto !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
+  opacity: 0.8 !important;
 }
 
 .question-number {
