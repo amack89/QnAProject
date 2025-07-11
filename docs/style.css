@@ -32,35 +32,42 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 40vh;
+  transform: translate(-50%, 0);
   z-index: 2;
 }
+
 
 .quiz-bg-image {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: contain;
+  left: 50%;
+  width: auto;
+  height: 50vh;
+  object-fit: cover;
+  object-position: top center;
+  transform: translateX(-50%);
   z-index: 1;
   opacity: 0.45;
   pointer-events: none;
   transition: opacity 0.4s;
 }
 
-/* Center and fit the cover image on the start page */
+/* Align the cover image to the top, fill 50vh vertically, width auto, centered horizontally */
 .quiz-bg .quiz-bg-image.cover-fit {
   width: auto !important;
-  height: 100vh !important;
+  height: 50vh !important;
   max-width: 100vw !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
+  object-position: top center !important;
   left: 50% !important;
-  top: 50% !important;
+  top: 0 !important;
   right: auto !important;
   bottom: auto !important;
-  transform: translate(-50%, -50%) !important;
-  margin: 0 auto !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
 }
 
 .question-number {
