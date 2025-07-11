@@ -190,7 +190,18 @@ nextBtn.onclick = () => {
       resultMsg = 'We need to help you rise from Employee to Executive Mindset';
     }
     questionTextEl.innerHTML = `Quiz complete! Your score: ${total} / ${questions.length}<br><br><strong>${resultMsg}</strong>`;
-    answersEl.innerHTML = '';
+    // Add reset button
+    answersEl.innerHTML = '<button id="reset-btn" class="reset-btn">Restart Quiz</button>';
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        for (let i = 0; i < userAnswers.length; i++) userAnswers[i] = null;
+        currentQuestion = -1;
+        prevBtn.style.display = '';
+        nextBtn.style.display = '';
+        renderQuestionWithBg();
+      };
+    }
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'none';
   }

@@ -2,7 +2,7 @@
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Quiz</name>
     <icon src="icon.png"/>
-    <description>Quiz App</description>
+    <description>Are you the CEO of your career?</description>
     <author email="adrian.mack2025@gmail.com" href="https://AdrianMackCSA.github.io/portfolio">
         Apache Cordova Team
     </author>

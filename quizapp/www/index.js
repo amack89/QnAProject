@@ -21,7 +21,8 @@ const questions = [
   { question: 'Have you identified your core strengths and know how to articulate them clearly in interviews or networking settings?', answers: answerOptions }
 ];
 
-let currentQuestion = 0;
+
+let currentQuestion = -1; // -1 means start page
 const userAnswers = Array(questions.length).fill(null);
 
 const questionNumberEl = document.getElementById('question-number');
@@ -30,7 +31,22 @@ const answersEl = document.getElementById('answers');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
+function renderStartPage() {
+  questionNumberEl.textContent = '';
+  questionTextEl.innerHTML = '<strong>Are you the CEO of your career?</strong><br><br>This quiz will ask you 15 questions about your career management. Click Start to begin.';
+  answersEl.innerHTML = '';
+  prevBtn.style.display = 'none';
+  nextBtn.textContent = 'Start';
+  nextBtn.disabled = false;
+  nextBtn.style.display = '';
+  setQuizBgImage();
+}
+
 function renderQuestion() {
+  if (currentQuestion === -1) {
+    renderStartPage();
+    return;
+  }
   const q = questions[currentQuestion];
   questionNumberEl.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
   questionTextEl.textContent = q.question;
@@ -45,6 +61,7 @@ function renderQuestion() {
     };
     answersEl.appendChild(btn);
   });
+  prevBtn.style.display = '';
   prevBtn.disabled = currentQuestion === 0;
   nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
   nextBtn.disabled = userAnswers[currentQuestion] === null;
@@ -79,5 +96,105 @@ nextBtn.onclick = () => {
   }
 };
 
-// Initialize
-renderQuestion();
+// Set background image for each question
+function setQuizBgImage() {
+  let bg = document.getElementById('quiz-bg');
+  if (!bg) return;
+  let img = bg.querySelector('.quiz-bg-image');
+  if (!img) {
+    img = document.createElement('img');
+    img.className = 'quiz-bg-image';
+    bg.insertBefore(img, bg.firstChild);
+  }
+  if (currentQuestion === -1) {
+    // Try both .jpg and .png for cover image
+    img.src = '';
+    img.alt = 'Quiz cover background';
+    img.classList.add('cover-fit');
+    // Prefer .png, fallback to .jpg if .png fails
+    const tryPng = () => {
+      img.src = 'img/Cover.png';
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = 'img/Cover.jpg';
+      };
+    };
+    tryPng();
+  } else {
+    // Use question number (1-based) for image name
+    const imgNum = currentQuestion + 1;
+    img.src = `img/${imgNum}.png`;
+    img.alt = `Background for question ${imgNum}`;
+    img.classList.remove('cover-fit');
+    img.onerror = null;
+  }
+}
+
+// Update renderQuestion to also update background
+function renderQuestionWithBg() {
+  renderQuestion();
+  setQuizBgImage();
+}
+
+// Navigation
+prevBtn.onclick = () => {
+  if (currentQuestion === 0) {
+    currentQuestion = -1;
+    renderQuestionWithBg();
+    return;
+  }
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestionWithBg();
+  }
+};
+
+nextBtn.onclick = () => {
+  if (currentQuestion === -1) {
+    currentQuestion = 0;
+    renderQuestionWithBg();
+    return;
+  }
+  if (userAnswers[currentQuestion] === null) return;
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    renderQuestionWithBg();
+  } else {
+    // Calculate and show score
+    let total = 0;
+    for (let i = 0; i < questions.length; i++) {
+      const ansIdx = userAnswers[i];
+      if (ansIdx !== null) {
+        total += questions[i].answers[ansIdx].score;
+      }
+    }
+    // Show end background
+    let bg = document.getElementById('quiz-bg');
+    if (bg) {
+      let img = bg.querySelector('.quiz-bg-image');
+      if (!img) {
+        img = document.createElement('img');
+        img.className = 'quiz-bg-image';
+        bg.insertBefore(img, bg.firstChild);
+      }
+      img.src = 'img/end.png';
+      img.alt = 'Quiz end background';
+    }
+    questionNumberEl.textContent = '';
+    let resultMsg = '';
+    if (total >= 13) {
+      resultMsg = 'You are the CEO';
+    } else if (total >= 10) {
+      resultMsg = 'Manager in Training - You have some work to do!';
+    } else {
+      resultMsg = 'We need to help you rise from Employee to Executive Mindset';
+    }
+    questionTextEl.innerHTML = `Quiz complete! Your score: ${total} / ${questions.length}<br><br><strong>${resultMsg}</strong>`;
+    answersEl.innerHTML = '';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+  }
+};
+
+// Initial render
+renderQuestionWithBg();
