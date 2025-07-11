@@ -107,13 +107,26 @@ function setQuizBgImage() {
     bg.insertBefore(img, bg.firstChild);
   }
   if (currentQuestion === -1) {
-    img.src = 'img/Cover.png';
+    // Try both .jpg and .png for cover image
+    img.src = '';
     img.alt = 'Quiz cover background';
+    img.classList.add('cover-fit');
+    // Prefer .png, fallback to .jpg if .png fails
+    const tryPng = () => {
+      img.src = 'img/Cover.png';
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = 'img/Cover.jpg';
+      };
+    };
+    tryPng();
   } else {
     // Use question number (1-based) for image name
     const imgNum = currentQuestion + 1;
     img.src = `img/${imgNum}.png`;
     img.alt = `Background for question ${imgNum}`;
+    img.classList.remove('cover-fit');
+    img.onerror = null;
   }
 }
 
