@@ -33,7 +33,7 @@ const nextBtn = document.getElementById('next-btn');
 
 function renderStartPage() {
   questionNumberEl.textContent = '';
-  questionTextEl.innerHTML = '<strong>Welcome to the Career Quiz!</strong><br><br>This quiz will ask you 15 questions about your career management. Click Start to begin.';
+  questionTextEl.innerHTML = '<strong>Are you the CEO of your career?</strong><br><br>This quiz will ask you 15 questions about your career management. Click Start to begin.';
   answersEl.innerHTML = '';
   prevBtn.style.display = 'none';
   nextBtn.textContent = 'Start';
@@ -168,7 +168,15 @@ nextBtn.onclick = () => {
       img.alt = 'Quiz end background';
     }
     questionNumberEl.textContent = '';
-    questionTextEl.textContent = `Quiz complete! Your score: ${total} / ${questions.length}`;
+    let resultMsg = '';
+    if (total >= 13) {
+      resultMsg = 'You are the CEO';
+    } else if (total >= 10) {
+      resultMsg = 'Manager in Training - You have some work to do!';
+    } else {
+      resultMsg = 'We need to help you rise from Employee to Executive Mindset';
+    }
+    questionTextEl.innerHTML = `Quiz complete! Your score: ${total} / ${questions.length}<br><br><strong>${resultMsg}</strong>`;
     answersEl.innerHTML = '';
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'none';
